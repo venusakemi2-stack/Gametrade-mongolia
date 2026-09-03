@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GameTrade - Middleman</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #080b16;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        nav {
+    padding: 15px;
+    background: #11162a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        nav a:hover {
+    color: #7c3aed;
+    transform: translateY(-3px);
+}
+
+        .hero {
+    padding: 100px 20px;
+    background: radial-gradient(circle at center, #1d1740, #080a14 70%);
+}
+
+        .hero h1 {
+    font-size: 55px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px #7c3aed;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #7c3aed;
+    }
+
+    to {
+        text-shadow: 0 0 30px #a855f7;
+    }
+}
+
+        .hero p {
+            font-size: 22px;
+            color: #b8bfd3;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 16px 35px;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .hero .button {
+    min-width: 180px;
+    text-align: center;
+    margin: 10px;
+}
+
+        .button:hover {
+    background: #6d28d9;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.6);
+}
+
+        .services {
+            padding: 50px 20px;
+        }
+
+        .card {
+    display: inline-block;
+    width: 280px;
+    height: 350px;
+    margin: 15px;
+    padding: 25px;
+    background: #151b31;
+    border-radius: 20px;
+    transition: 0.3s;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+}
+#order .card {
+    height: auto;
+}
+
+.section-subtitle {
+    color: #b8bfd3;
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 30px;
+}
+       .card h2 {
+    height: 50px;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+      .game-image {
+    width: 230px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin: 10px auto 15px;
+    transition: 0.3s;
+}
+
+.card:hover .game-image {
+    transform: scale(1.05);
+}
+.card .button {
+    width: 100%;
+    max-width: 250px;
+    height: 62px;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#result {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #151b31;
+    border: 2px solid #7c3aed;
+    border-radius: 15px;
+    color: #ffffff;
+    text-align: left;
+    line-height: 1.8;
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.25);
+    font-size: 16px;
+    font-weight: 500;
+}
+footer {
+    margin-top: 60px;
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 2px solid #7c3aed;
+    background: #11162a;
+}
+
+footer h2 {
+    margin-bottom: 10px;
+}
+
+footer p {
+    color: #b8bfd3;
+    margin: 8px 0;
+}
+@media (max-width: 768px) {
+
+    nav a {
+        margin: 0 8px;
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 70px 15px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+
+    .card {
+    width: 90%;
+    max-width: 320px;
+    margin: 15px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+}
+#selectedGame {
+    color: #a855f7;
+    text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+.order-number {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 8px 15px;
+    background: #7c3aed;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+#result h3 {
+    color: #a855f7;
+    font-size: 22px;
+    margin-top: 0;
+}
+.nav-logo {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #7c3aed;
+    margin-bottom: 15px;
+}
+.nav-logo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #7c3aed;
+    margin-bottom: 12px;
+}
+
+.nav-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #080a14;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: loaderFade 1s ease 2s forwards;
+}
+
+.loader-content {
+    text-align: center;
+}
+.loader-spinner {
+    width: 45px;
+    height: 45px;
+    margin: 20px auto 0;
+    border: 4px solid #2a2045;
+    border-top: 4px solid #a855f7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loader-content h1 {
+    color: white;
+    font-size: 35px;
+    text-shadow: 0 0 20px #7c3aed;
+}
+
+@keyframes loaderFade {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+    <div class="loader-content">
+        <h1>🎮 GameTrade</h1>
+        <div class="loader-spinner"></div>
+    </div>
+</div>
+
+    <nav>
+    <div class="nav-logo">🎮 GameTrade</div>
+
+    <div class="nav-menu">
+        <a href="#home">HOME</a>
+        <a href="#games">GAMES</a>
+        <a href="#order">MIDDLEMAN</a>
+        <a href="#tarif">TARIF</a>
+        <a href="#contact">CONTACT</a>
+    </div>
+</nav>
+
+    <section id="home" class="hero">
+       <h1>🎮 GameTrade Mongolia</h1>
+
+        <p>Монголын Gaming Community-д зориулсан найдвартай Middleman үйлчилгээ.</p>
+
+        <a class="button" href="#games">🎮 Тоглоом сонгох</a>
+
+        <p>🔐 Аюулгүй • ⚡ Шуурхай • 🎮 Gaming</p>
+
+        <a class="button" href="#tarif">💰 TARIF харах</a>
+    </section>
+
+    <section class="services">
+
+        <div class="card">
+            <h2>🛡️ Safe Trade</h2>
+            <p>Таны арилжааг найдвартай зуучилна.</p>
+        </div>
+
+        <div class="card">
+            <h2>⚡ Fast Service</h2>
+            <p>Хурдан шуурхай үйлчилгээ.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎮 Gaming</h2>
+            <p>MLBB, Roblox, CS2 болон бусад.</p>
+        </div>
+
+    </section>
+<section id="contact" class="services">
+
+    <h2>📞 Contact GameTrade</h2>
+
+    <p>Middleman үйлчилгээ авах бол доорх сувгаар холбогдоно уу.</p>
+
+    <div class="card">
+        <h2>💬 Discord</h2>
+        <p>Хүсэлт илгээх болон тусламж авах</p>
+
+        <a class="button" href="https://discord.gg/kUvDXGebE" target="_blank">
+            Discord-оор холбогдох
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>⚡ Support</h2>
+        <p>Таны хүсэлтийг хурдан шалгаж тусална.</p>
+
+        <a class="button" href="#order">
+            Middleman авах
+        </a>
+    </div>
+
+</section>
+
+</section>
+<section id="tarif" class="services">
+
+    <h2>💰 Middleman TARIF</h2>
+
+    <div class="card">
+        <h2>50,000₮ хүртэл</h2>
+        <p>Fee: 3,000₮</p>
+    </div>
+
+    <div class="card">
+        <h2>50,001₮ – 100,000₮</h2>
+        <p>Fee: 5,000₮</p>
+    </div>
+
+    <div class="card">
+        <h2>100,001₮ – 300,000₮</h2>
+        <p>Fee: 8,000₮</p>
+    </div>
+
+</section>
+<section class="services">
+
+    <h2>🛡️ Яагаад GameTrade?</h2>
+
+    <div class="card">
+        <h2>🔐 Аюулгүй</h2>
+        <p>Арилжааг зуучлагчийн хяналттай хийхэд тусална.</p>
+    </div>
+
+    <div class="card">
+        <h2>⚡ Шуурхай</h2>
+        <p>Хүсэлтийг хурдан боловсруулна.</p>
+    </div>
+
+    <div class="card">
+        <h2>🎮 Gaming</h2>
+        <p>Олон төрлийн тоглоомын үйлчилгээ.</p>
+    </div>
+
+</section>
+<section id="games" class="services">
+
+    <h2>🎮 GAME TRADE</h2>
+<p class="section-subtitle">Өөрийн тоглоомоо сонгоод Middleman хүсэлт илгээнэ үү.</p>
+
+    <div class="card">
+        <h2>⚔️ Mobile Legends</h2>
+        <img src="mlbb.webp" class="game-image">
+        <p>MLBB Middleman</p>
+       <a class="button" href="#order" onclick="selectGame('Mobile Legends')">Сонгох</a>
+    </div>
+
+    <div class="card">
+        <h2>🧱 Roblox</h2>
+
+        <img src="roblox.webp" class="game-image">
+
+        <p>Roblox Middleman</p>
+        <a class="button" href="#order" onclick="selectGame('Roblox')">Сонгох</a>
+    </div>
+
+    <div class="card">
+        <h2>🔫 CS2</h2>
+        <img src="cs2.jpg" class="game-image">
+        <p>CS2 Middleman</p>
+        <a class="button" href="#order" onclick="selectGame('CS2')">Сонгох</a>
+    </div>
+
+    <div class="card">
+        <h2>🪖 PUBG</h2>
+        <img src="pubg.jpg" class="game-image">
+        <p>PUBG Middleman</p>
+        <a class="button" href="#order" onclick="selectGame('PUBG')">Сонгох</a>
+    </div>
+
+</section>
+<section id="order" class="services">
+
+    <h2>🛡️ Middleman үйлчилгээ</h2>
+
+    <div class="card">
+
+        <h2 id="selectedGame">🎮 Тоглоом сонгоно уу</h2>
+
+        <p>Арилжааны дүнгээ оруулаад хүсэлтээ илгээнэ үү.</p>
+
+        <input
+            type="number"
+            id="amount"
+            placeholder="💰 Арилжааны дүн (₮)"
+        >
+        <br><br>
+
+<input
+    type="text"
+    id="username"
+    placeholder="👤 Таны нэр"
+>
+
+<br><br>
+
+<input
+    type="text"
+    id="discord"
+    placeholder="💬 Discord нэр"
+>
+
+        <br><br>
+
+        <button class="button" onclick="sendOrder()">
+            Хүсэлт илгээх
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+</section>
+
+<script>
+   function selectGame(game) {
+    document.getElementById("selectedGame").innerText = "🎮 " + game;
+}
+
+function sendOrder() {
+
+    let game = document.getElementById("selectedGame").innerText;
+    let amount = document.getElementById("amount").value;
+    let username = document.getElementById("username").value;
+    let discord = document.getElementById("discord").value;
+
+    if (game === "🎮 Тоглоом сонгоно уу") {
+        alert("Эхлээд тоглоомоо сонгоно уу!");
+        return;
+    }
+
+    if (amount === "" || username === "" || discord === "") {
+        alert("⚠️Бүх мэдээллээ бөглөнө үү!");
+        return;
+    }
+
+    let orderNumber = "GT-" + Math.floor(10000 + Math.random() * 90000);
+
+    let fee;
+
+    if (Number(amount) <= 50000) {
+        fee = 3000;
+    } else if (Number(amount) <= 100000) {
+        fee = 5000;
+    } else {
+        fee = 8000;
+    }
+
+    document.getElementById("result").style.display = "block";
+
+document.getElementById("result").innerHTML =
+    "<h3>✅ Хүсэлт бэлэн боллоо!</h3>" +
+    "<strong>🎫 Захиалгын дугаар:</strong><br>" +
+    "<span class='order-number'>" + orderNumber + "</span><br><br>" +
+    game + "<br>" +
+    "💰 Дүн: " + amount + "₮<br>" +
+    "💵 Middleman Fee: " + fee + "₮<br>" +
+    "👤 Нэр: " + username + "<br>" +
+    "💬 Discord: " + discord;
+}
+</script>
+<footer>
+    <h2>🎮 GameTrade Mongolia</h2>
+    <p>Gaming community-д зориулсан Middleman үйлчилгээ.</p>
+    <p>© 2026 GameTrade Mongolia</p>
+</footer>
+</body>
+</html>
