@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GameTrade - Order Check</title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0714;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        nav {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+            background: #100a1d;
+            border-bottom: 1px solid #2b1645;
+            box-shadow: 0 0 20px rgba(139, 61, 255, 0.15);
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #b66cff;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #b66cff;
+        }
+
+        /* MAIN */
+        .container {
+            max-width: 650px;
+            margin: 80px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 40px;
+            color: #b66cff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(182, 108, 255, 0.5);
+        }
+
+        .description {
+            color: #bdb5c9;
+            margin-bottom: 35px;
+            font-size: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input {
+            width: 280px;
+            padding: 15px;
+            border: 1px solid #8b3dff;
+            border-radius: 8px;
+            background: #151020;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            box-shadow: 0 0 15px rgba(139, 61, 255, 0.4);
+        }
+
+        button {
+            padding: 15px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #8b3dff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #a65cff;
+            transform: translateY(-2px);
+        }
+
+        /* RESULT */
+        #result {
+            margin: 35px auto 0;
+            padding: 25px;
+            max-width: 500px;
+            background: #151020;
+            border: 1px solid #8b3dff;
+            border-radius: 14px;
+            text-align: left;
+            line-height: 2;
+            box-shadow: 0 0 25px rgba(139, 61, 255, 0.15);
+        }
+
+        .order-title {
+            color: #b66cff;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            color: #70ff9b;
+            font-weight: bold;
+        }
+
+        .not-found {
+            color: #ff6b6b;
+            text-align: center;
+        }
+
+        /* MOBILE */
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 0 20px;
+                flex-direction: column;
+                height: auto;
+                padding-top: 18px;
+                padding-bottom: 18px;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                gap: 14px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-menu a {
+                font-size: 13px;
+            }
+
+            .container {
+                margin: 50px auto;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .search-box {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            input {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            button {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-logo">🎮 GameTrade</div>
+
+        <div class="nav-menu">
+            <a href="index.html">HOME</a>
+            <a href="games.html">GAMES</a>
+            <a href="middleman.html">MIDDLEMAN</a>
+            <a href="tarif.html">TARIF</a>
+            <a href="order.html">ORDER</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+    </nav>
+
+
+    <!-- ORDER CHECK -->
+    <div class="container">
+
+        <h1>🎫 Захиалга шалгах</h1>
+
+        <p class="description">
+            GT-xxxxx захиалгын дугаараа оруулж захиалгаа шалгана уу.
+        </p>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="orderNumber"
+                placeholder="🎫 GT-xxxxx"
+            >
+
+            <button onclick="checkOrder()">
+                🔎 Шалгах
+            </button>
+
+        </div>
+
+        <div id="result"></div>
+
+    </div>
+
+
+    <!-- SUPABASE + FUNCTION -->
+    <script>
+
+        const SUPABASE_URL =
+            "https://ltpsvdthypdjyuaspxyr.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_5g3Os_4D4O6vliZXnQolyA_3_mB8LMn";
+
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+        async function checkOrder() {
+
+            const orderNumber =
+                document.getElementById("orderNumber").value.trim();
+
+            const result =
+                document.getElementById("result");
+
+
+            if (orderNumber === "") {
+
+                result.innerHTML = `
+                    <div class="not-found">
+                        ❌ Захиалгын дугаараа оруулна уу!
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            const { data, error } = await supabaseClient
+                .from("orders")
+                .select("*")
+                .eq("order_number", orderNumber)
+                .single();
+
+
+            if (error || !data) {
+
+                result.innerHTML = `
+                    <div class="not-found">
+                        ❌ Захиалга олдсонгүй.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            let statusText = data.status;
+
+            if (data.status === "pending") {
+                statusText = "🟡 Pending";
+            }
+
+            if (data.status === "processing") {
+                statusText = "🔵 Processing";
+            }
+
+            if (data.status === "completed") {
+                statusText = "🟢 Completed";
+            }
+
+            if (data.status === "cancelled") {
+                statusText = "🔴 Cancelled";
+            }
+
+
+            result.innerHTML = `
+
+                <div class="order-title">
+                    🎫 Захиалгын мэдээлэл
+                </div>
+
+                🎫 Захиалга:
+                <strong>${data.order_number}</strong>
+                <br>
+
+                🎮 Тоглоом:
+                ${data.game}
+                <br>
+
+                💰 Дүн:
+                ${Number(data.amount).toLocaleString()}₮
+                <br>
+
+                👤 Нэр:
+                ${data.username}
+                <br>
+
+                💬 Discord:
+                ${data.discord}
+                <br>
+
+                📌 Төлөв:
+                <span class="status">
+                    ${statusText}
+                </span>
+
+            `;
+        }
+        const params = new URLSearchParams(window.location.search);
+const orderNumber = params.get("order");
+
+if (orderNumber) {
+    document.getElementById("orderNumber").value = orderNumber;
+    checkOrder();
+}
+
+    </script>
+
+</body>
+
+</html>

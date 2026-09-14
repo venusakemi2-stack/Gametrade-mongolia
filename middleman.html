@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GameTrade - Middleman</title>
+
+    <style>
+        body {
+    margin: 0;
+    background: linear-gradient(180deg, #0d0718, #07040f);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+        /* NAVBAR */
+
+nav {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+    background: #100a1d;
+    border-bottom: 1px solid #2b1645;
+    box-shadow: 0 0 20px rgba(139, 61, 255, 0.15);
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b66cff;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #b66cff;
+}
+
+
+        nav a:hover {
+            color: #7c3aed;
+        }
+
+        h1 {
+    font-size: 40px;
+    color: #b66cff;
+    margin-bottom: 15px;
+    text-shadow: 0 0 20px rgba(182, 108, 255, 0.5);
+}
+
+        .card {
+    width: 500px;
+    max-width: 85%;
+    margin: 35px auto;
+    padding: 25px;
+    background: #151020;
+    border: 1px solid #8b3dff;
+    border-radius: 14px;
+    box-sizing: border-box;
+    box-shadow: 0 0 25px rgba(139, 61, 255, 0.15);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 35px rgba(139, 61, 255, 0.4);
+}
+
+        input {
+    width: 100%;
+    padding: 16px;
+    margin: 10px 0;
+    border-radius: 12px;
+    border: 2px solid #2b1645;
+    background: #0b0714;
+    color: white;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #8b3dff;
+    box-shadow: 0 0 15px rgba(139, 61, 255, 0.35);
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+input:focus {
+    border-color: #8b3dff;
+    box-shadow: 0 0 15px rgba(139, 61, 255, 0.35);
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 16px 35px;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #6d28d9;
+        }
+        select {
+    width: 100%;
+    padding: 16px;
+    margin: 10px 0;
+    border: 2px solid #7c3aed;
+    border-radius: 12px;
+    background: #151b31;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+}
+
+select:focus {
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.6);
+}
+
+select option {
+    background: #151b31;
+    color: white;
+}
+.success-message {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #151b31;
+    border: 2px solid #7c3aed;
+    border-radius: 15px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+}
+.success-message {
+    margin: 25px auto;
+    padding: 25px;
+    max-width: 500px;
+    background: linear-gradient(145deg, #171025, #0f0a18);
+    border: 1px solid #8b3dff;
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(139, 61, 255, 0.25);
+    text-align: center;
+    line-height: 1.8;
+}
+
+.success-message strong {
+    color: #b66cff;
+    font-size: 20px;
+}
+
+.success-message button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8b3dff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.success-message button:hover {
+    background: #a65cff;
+    box-shadow: 0 0 15px rgba(139, 61, 255, 0.5);
+}
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="nav-logo">🎮 GameTrade</div>
+
+    <div class="nav-menu">
+        <a href="index.html">HOME</a>
+        <a href="games.html">GAMES</a>
+        <a href="middleman.html">MIDDLEMAN</a>
+        <a href="tarif.html">TARIF</a>
+        <a href="order.html">ORDER</a>
+        <a href="contact.html">CONTACT</a>
+    </div>
+</nav>
+
+<h1>🛡️ Middleman үйлчилгээ</h1>
+
+<div class="card">
+
+    <h2>🎮 Тоглоом сонгоно уу</h2>
+
+    <p>Арилжааны мэдээллээ оруулаад хүсэлт илгээнэ үү.</p>
+
+    <select id="game">
+    <option value="">🎮 Тоглоом сонгох</option>
+    <option value="Mobile Legends">🎮 Mobile Legends</option>
+    <option value="Roblox">🧱 Roblox</option>
+    <option value="CS2">🔫 CS2</option>
+    <option value="PUBG">🎯 PUBG</option>
+</select>
+
+    <input type="number" id="amount" placeholder="💰 Арилжааны дүн (₮)">
+
+    <input type="text" id="username" placeholder="👤 Таны нэр">
+
+    <input type="text" id="discord" placeholder="💬 Discord нэр">
+
+    <br>
+
+    <button class="button" onclick="sendRequest()">Хүсэлт илгээх</button>
+
+    <div id="successMessage" class="success-message"></div>
+    <a
+    id="orderCheckButton"
+    href="order.html"
+    style="
+        display:none;
+        margin-top:15px;
+        padding:12px 20px;
+        background:#8b3dff;
+        color:white;
+        text-decoration:none;
+        border-radius:8px;
+        font-weight:bold;
+    "
+>
+    🎫 Захиалгаа шалгах
+</a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = "https://ltpsvdthypdjyuaspxyr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5g3Os_4D4O6vliZXnQolyA_3_mB8LMn";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function sendRequest() {
+    let game = document.getElementById("game").value;
+    let amount = document.getElementById("amount").value;
+    let username = document.getElementById("username").value;
+    let discord = document.getElementById("discord").value; 
+
+    if (game === "") {
+        alert("Эхлээд тоглоомоо сонгоно уу!");
+        return;
+    }
+
+    let orderNumber = "GT-" + Math.floor(10000 + Math.random() * 90000);
+    let { data, error } = await supabaseClient
+    .from("orders")
+    .insert([
+        {
+            game: game,
+            amount: amount,
+            username: username,
+            discord: discord,
+            order_number: orderNumber
+        }
+    ]);
+
+if (error) {
+    alert("Алдаа гарлаа: " + error.message);
+    return;
+}
+    let message = document.getElementById("successMessage");
+
+message.innerHTML =
+    "✅ Хүсэлт амжилттай илгээгдлээ!<br><br>" +
+    "🎮 Тоглоом: " + game + "<br>" +
+    "🎫 Захиалгын дугаар: <strong id='myOrderNumber'>" +
+    orderNumber +
+    "</strong><br><br>" +
+    "<button onclick='copyOrderNumber()'>📋 GT дугаар Copy хийх</button>";
+message.style.display = "block";
+document.getElementById("game").value = "";
+document.getElementById("amount").value = "";
+document.getElementById("username").value = "";
+document.getElementById("discord").value = "";
+const orderCheckButton =
+    document.getElementById("orderCheckButton");
+
+orderCheckButton.style.display = "inline-block";
+
+orderCheckButton.href =
+    "order.html?order=" + encodeURIComponent(orderNumber);
+}
+function copyOrderNumber() {
+    const orderNumber =
+        document.getElementById("myOrderNumber").innerText;
+
+    navigator.clipboard.writeText(orderNumber);
+
+    alert("✅ GT дугаар Copy хийгдлээ!");
+}
+</script>
+</body>
+</html>

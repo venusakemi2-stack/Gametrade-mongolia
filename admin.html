@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GameTrade - Admin</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0714;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        nav {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+            background: #100a1d;
+            border-bottom: 1px solid #2b1645;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #b66cff;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #b66cff;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        h1 {
+            color: #b66cff;
+            text-shadow: 0 0 20px rgba(182, 108, 255, 0.5);
+        }
+
+        .login-box {
+            width: 350px;
+            margin: 100px auto;
+            padding: 30px;
+            background: #151020;
+            border: 1px solid #8b3dff;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(139, 61, 255, 0.2);
+            text-align: center;
+        }
+
+        .login-box h1 {
+            margin-bottom: 25px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #8b3dff;
+            border-radius: 8px;
+            background: #0b0714;
+            color: white;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #8b3dff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #a65cff;
+        }
+
+        .logout {
+            background: #d33;
+        }
+
+        .logout:hover {
+            background: #f44;
+        }
+
+        #loginMessage {
+            margin-top: 15px;
+            color: #ff6b6b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background: #151020;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #211331;
+            color: #b66cff;
+            padding: 15px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #2b1645;
+            text-align: center;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 6px;
+            background: #151020;
+            color: white;
+            border: 1px solid #8b3dff;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                padding: 20px;
+                overflow-x: auto;
+            }
+
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-menu {
+                gap: 12px;
+            }
+
+            .nav-menu a {
+                font-size: 12px;
+            }
+
+            table {
+                min-width: 1000px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginSection" class="login-box">
+
+        <h1>🔐 Admin Login</h1>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="📧 Email"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="🔑 Password"
+        >
+
+        <button onclick="login()">
+            Нэвтрэх
+        </button>
+
+        <div id="loginMessage"></div>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+    <div id="adminSection" style="display:none;">
+
+        <nav>
+
+            <div class="nav-logo">
+                🎮 GameTrade Admin
+            </div>
+
+            <div class="nav-menu">
+                <a href="index.html">HOME</a>
+                <a href="games.html">GAMES</a>
+                <a href="middleman.html">MIDDLEMAN</a>
+                <a href="tarif.html">TARIF</a>
+                <a href="order.html">ORDER</a>
+                <a href="contact.html">CONTACT</a>
+
+                <button class="logout" onclick="logout()">
+                    Гарах
+                </button>
+            </div>
+
+        </nav>
+
+
+        <div class="container">
+
+            <div class="admin-header">
+
+                <div>
+                    <h1>🎮 GameTrade Admin</h1>
+                    <p>Ирсэн Middleman хүсэлтүүд</p>
+                </div>
+
+            </div>
+<div id="stats" style="
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:30px;
+">
+
+    <div style="
+        flex:1;
+        min-width:180px;
+        padding:20px;
+        background:#151020;
+        border:1px solid #8b3dff;
+        border-radius:12px;
+        text-align:center;
+    ">
+        <div style="font-size:30px;">📦</div>
+        <h2 id="totalOrders">0</h2>
+        <p>Нийт захиалга</p>
+    </div>
+
+    <div style="
+        flex:1;
+        min-width:180px;
+        padding:20px;
+        background:#151020;
+        border:1px solid #8b3dff;
+        border-radius:12px;
+        text-align:center;
+    ">
+        <div style="font-size:30px;">🟡</div>
+        <h2 id="pendingOrders">0</h2>
+        <p>Pending</p>
+    </div>
+
+    <div style="
+        flex:1;
+        min-width:180px;
+        padding:20px;
+        background:#151020;
+        border:1px solid #8b3dff;
+        border-radius:12px;
+        text-align:center;
+    ">
+        <div style="font-size:30px;">🔵</div>
+        <h2 id="processingOrders">0</h2>
+        <p>Processing</p>
+    </div>
+
+    <div style="
+        flex:1;
+        min-width:180px;
+        padding:20px;
+        background:#151020;
+        border:1px solid #8b3dff;
+        border-radius:12px;
+        text-align:center;
+    ">
+        <div style="font-size:30px;">🟢</div>
+        <h2 id="completedOrders">0</h2>
+        <p>Completed</p>
+    </div>
+
+</div>
+<div style="
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:20px;
+">
+
+    <div style="
+        flex:1;
+        min-width:180px;
+        padding:20px;
+        background:#151020;
+        border:1px solid #8b3dff;
+        border-radius:12px;
+        text-align:center;
+    ">
+        <div style="font-size:30px;">🔴</div>
+        <h2 id="cancelledOrders">0</h2>
+        <p>Cancelled</p>
+    </div>
+
+    <div style="
+        flex:1;
+        min-width:180px;
+        padding:20px;
+        background:#151020;
+        border:1px solid #8b3dff;
+        border-radius:12px;
+        text-align:center;
+    ">
+        <div style="font-size:30px;">💰</div>
+        <h2 id="totalAmount">0₮</h2>
+        <p>Нийт арилжааны дүн</p>
+    </div>
+
+</div>
+<div style="
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:30px;
+    margin-bottom:20px;
+">
+
+    <input
+        type="text"
+        id="searchOrder"
+        placeholder="🔎 GT-xxxxx хайх..."
+        oninput="filterOrders()"
+        style="
+            padding:12px;
+            width:250px;
+            border:1px solid #8b3dff;
+            border-radius:8px;
+            background:#151020;
+            color:white;
+            outline:none;
+        "
+    >
+
+    <select
+        id="statusFilter"
+        onchange="filterOrders()"
+        style="
+            padding:12px;
+            border:1px solid #8b3dff;
+            border-radius:8px;
+            background:#151020;
+            color:white;
+            outline:none;
+        "
+    >
+        <option value="all">📋 Бүх төлөв</option>
+        <option value="pending">🟡 Pending</option>
+        <option value="processing">🔵 Processing</option>
+        <option value="completed">🟢 Completed</option>
+        <option value="cancelled">🔴 Cancelled</option>
+    </select>
+
+</div>
+            <div id="orders"></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://ltpsvdthypdjyuaspxyr.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_5g3Os_4D4O6vliZXnQolyA_3_mB8LMn";
+
+
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+        // LOGIN
+        async function login() {
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const message =
+                document.getElementById("loginMessage");
+
+
+            if (email === "" || password === "") {
+
+                message.innerText =
+                    "❌ Email болон password оруулна уу!";
+
+                return;
+            }
+
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+
+            if (error) {
+
+                message.innerText =
+                    "❌ Нэвтрэхэд алдаа: " + error.message;
+
+                return;
+            }
+
+
+            showAdmin();
+        }
+
+
+        // SHOW ADMIN
+        function showAdmin() {
+
+            document.getElementById("loginSection").style.display =
+                "none";
+
+            document.getElementById("adminSection").style.display =
+                "block";
+
+            loadOrders();
+        }
+
+
+        // LOGOUT
+        async function logout() {
+
+            await supabaseClient.auth.signOut();
+
+            document.getElementById("adminSection").style.display =
+                "none";
+
+            document.getElementById("loginSection").style.display =
+                "block";
+
+            document.getElementById("email").value = "";
+
+            document.getElementById("password").value = "";
+        }
+
+
+        // LOAD ORDERS
+        async function loadOrders() {
+
+            const { data, error } =
+                await supabaseClient
+                    .from("orders")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    });
+
+
+            if (error) {
+
+                document.getElementById("orders").innerHTML =
+                    "❌ Алдаа: " + error.message;
+
+                return;
+            }
+
+            document.getElementById("totalOrders").innerText = data.length;
+
+document.getElementById("pendingOrders").innerText =
+    data.filter(order => order.status === "pending").length;
+
+document.getElementById("processingOrders").innerText =
+    data.filter(order => order.status === "processing").length;
+
+document.getElementById("completedOrders").innerText =
+    data.filter(order => order.status === "completed").length;
+    document.getElementById("cancelledOrders").innerText =
+    data.filter(order => order.status === "cancelled").length;
+
+const totalAmount = data
+    .filter(order => order.status === "completed")
+    .reduce(
+        (sum, order) => sum + Number(order.amount || 0),
+        0
+    );
+
+document.getElementById("totalAmount").innerText =
+    totalAmount.toLocaleString() + "₮";
+
+
+            if (!data || data.length === 0) {
+
+                document.getElementById("orders").innerHTML =
+                    "<p>📭 Одоогоор захиалга алга.</p>";
+
+                return;
+            }
+
+
+            document.getElementById("orders").innerHTML = `
+
+                <table>
+
+                    <tr>
+
+                        <th>№</th>
+                        <th>🎮 Тоглоом</th>
+                        <th>💰 Дүн</th>
+                        <th>👤 Нэр</th>
+                        <th>💬 Discord</th>
+                        <th>🎫 Захиалга</th>
+                        <th>🕐 Огноо</th>
+                        <th>📌 Төлөв</th>
+
+                    </tr>
+
+
+                    ${data.map(order => `
+
+                        <tr>
+
+                            <td>
+                                ${order.id}
+                            </td>
+
+                            <td>
+                                ${order.game}
+                            </td>
+
+                            <td>
+                                ${Number(order.amount).toLocaleString()}₮
+                            </td>
+
+                            <td>
+                                ${order.username}
+                            </td>
+
+                            <td>
+                                ${order.discord}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    ${order.order_number}
+                                </strong>
+                            </td>
+
+                            <td>
+                                ${new Date(
+                                    order.created_at
+                                ).toLocaleString()}
+                            </td>
+
+                            <td>
+
+                                <select
+                                    onchange="updateStatus(${order.id}, this.value)"
+                                >
+
+                                    <option
+                                        value="pending"
+                                        ${order.status === "pending" ? "selected" : ""}
+                                    >
+                                        🟡 Pending
+                                    </option>
+
+                                    <option
+                                        value="processing"
+                                        ${order.status === "processing" ? "selected" : ""}
+                                    >
+                                        🔵 Processing
+                                    </option>
+
+                                    <option
+                                        value="completed"
+                                        ${order.status === "completed" ? "selected" : ""}
+                                    >
+                                        🟢 Completed
+                                    </option>
+
+                                    <option
+                                        value="cancelled"
+                                        ${order.status === "cancelled" ? "selected" : ""}
+                                    >
+                                        🔴 Cancelled
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                        </tr>
+
+                    `).join("")}
+
+                </table>
+            `;
+        }
+
+
+        // UPDATE STATUS
+        function filterOrders() {
+
+    const search =
+        document.getElementById("searchOrder").value
+        .toLowerCase()
+        .trim();
+
+    const status =
+        document.getElementById("statusFilter").value;
+
+    const table =
+        document.querySelector("#orders table");
+
+    if (!table) return;
+
+    const rows = table.querySelectorAll("tr");
+
+    rows.forEach((row, index) => {
+
+        // Header мөрийг алгасна
+        if (index === 0) return;
+
+        const orderNumber =
+            row.cells[5].innerText.toLowerCase();
+
+        const orderStatus =
+            row.querySelector("select").value;
+
+        const matchesSearch =
+            orderNumber.includes(search);
+
+        const matchesStatus =
+            status === "all" ||
+            orderStatus === status;
+
+        row.style.display =
+            matchesSearch && matchesStatus
+                ? ""
+                : "none";
+    });
+}
+        async function updateStatus(id, status) {
+
+            const { error } =
+                await supabaseClient
+                    .from("orders")
+                    .update({
+                        status: status
+                    })
+                    .eq("id", id);
+
+
+            if (error) {
+
+                alert(
+                    "❌ Алдаа: " + error.message
+                );
+
+                return;
+            }
+
+
+            loadOrders();
+        }
+
+
+        // CHECK LOGIN SESSION
+        async function checkSession() {
+
+            const { data } =
+                await supabaseClient.auth.getSession();
+
+
+            if (data.session) {
+
+                showAdmin();
+
+            } else {
+
+                document.getElementById("loginSection").style.display =
+                    "block";
+
+                document.getElementById("adminSection").style.display =
+                    "none";
+            }
+        }
+
+
+        checkSession();
+
+        setInterval(() => {
+    loadOrders();
+}, 10000);
+
+    </script>
+
+</body>
+
+</html>
