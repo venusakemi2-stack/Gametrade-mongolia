@@ -1,0 +1,516 @@
+```html
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GameTrade - Top Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0714;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+            background: #100a1d;
+            border-bottom: 1px solid #2b1645;
+            box-shadow: 0 0 20px rgba(139, 61, 255, 0.15);
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #b66cff;
+            text-shadow: 0 0 10px #7c3aed;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #b66cff;
+        }
+
+        /* TOP UP */
+
+        .container {
+            max-width: 650px;
+            margin: 70px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 42px;
+            color: #b66cff;
+            text-shadow: 0 0 20px rgba(182, 108, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #bdb5c9;
+            margin-bottom: 35px;
+        }
+
+        .card {
+            background: #151020;
+            border: 1px solid #8b3dff;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(139, 61, 255, 0.15);
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin: 18px 0 8px;
+            font-weight: bold;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #8b3dff;
+            border-radius: 8px;
+            background: #0b0714;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            box-shadow: 0 0 15px rgba(139, 61, 255, 0.4);
+        }
+
+        .price {
+            margin-top: 25px;
+            padding: 20px;
+            background: #100a1d;
+            border: 1px solid #2b1645;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #b66cff;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #8b3dff;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #a65cff;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: #100a1d;
+            border: 1px solid #8b3dff;
+            border-radius: 10px;
+            line-height: 1.8;
+        }
+
+        .pending {
+            color: #f5c542;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+
+            nav {
+                height: auto;
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .nav-menu {
+                gap: 14px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-menu a {
+                font-size: 13px;
+            }
+
+            .container {
+                margin: 40px auto;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="nav-logo">
+            🎮 GameTrade
+        </div>
+
+        <div class="nav-menu">
+
+            <a href="index.html">HOME</a>
+            <a href="games.html">GAMES</a>
+            <a href="middleman.html">MIDDLEMAN</a>
+            <a href="tarif.html">TARIF</a>
+            <a href="order.html">ORDER</a>
+            <a href="topup.html">TOP UP</a>
+            <a href="contact.html">CONTACT</a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- TOP UP -->
+
+    <div class="container">
+
+        <h1>💎 Game Top Up</h1>
+
+        <p class="description">
+            Тоглоомын Diamond, UC болон бусад багцыг сонгоно уу.
+        </p>
+
+
+        <div class="card">
+
+            <label>🎮 Тоглоом</label>
+
+            <select id="game" onchange="updatePackages()">
+
+                <option value="">Тоглоом сонгох</option>
+
+                <option value="Mobile Legends">
+                    Mobile Legends
+                </option>
+
+                <option value="PUBG Mobile">
+                    PUBG Mobile
+                </option>
+
+                <option value="Roblox">
+                    Roblox
+                </option>
+
+            </select>
+
+
+            <label>👤 Player ID</label>
+
+            <input
+                type="text"
+                id="playerId"
+                placeholder="Player ID"
+            >
+
+
+            <label>🌐 Server ID</label>
+
+            <input
+                type="text"
+                id="serverId"
+                placeholder="Server ID"
+            >
+
+
+            <label>💎 Багц</label>
+
+            <select id="package" onchange="updatePrice()">
+
+                <option value="">
+                    Эхлээд тоглоом сонгоно уу
+                </option>
+
+            </select>
+
+
+            <div class="price">
+
+                💰 Үнэ:
+                <span id="price">
+                    0₮
+                </span>
+
+            </div>
+
+
+            <button onclick="createOrder()">
+                🛒 Захиалах
+            </button>
+
+
+            <div
+                id="result"
+                class="result">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const packages = {
+
+            "Mobile Legends": [
+
+                {
+                    name: "86 Diamond",
+                    price: 5000
+                },
+
+                {
+                    name: "172 Diamond",
+                    price: 9500
+                },
+
+                {
+                    name: "257 Diamond",
+                    price: 14000
+                }
+
+            ],
+
+            "PUBG Mobile": [
+
+                {
+                    name: "60 UC",
+                    price: 5000
+                },
+
+                {
+                    name: "325 UC",
+                    price: 22000
+                },
+
+                {
+                    name: "660 UC",
+                    price: 42000
+                }
+
+            ],
+
+            "Roblox": [
+
+                {
+                    name: "400 Robux",
+                    price: 18000
+                },
+
+                {
+                    name: "800 Robux",
+                    price: 35000
+                },
+
+                {
+                    name: "1700 Robux",
+                    price: 70000
+                }
+
+            ]
+
+        };
+
+
+        function updatePackages() {
+
+            const game =
+                document.getElementById("game").value;
+
+            const packageSelect =
+                document.getElementById("package");
+
+            packageSelect.innerHTML =
+                '<option value="">Багц сонгох</option>';
+
+            document.getElementById("price")
+                .innerText = "0₮";
+
+
+            if (!game) {
+                return;
+            }
+
+
+            packages[game].forEach(item => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    item.price;
+
+                option.textContent =
+                    item.name + " - " +
+                    item.price.toLocaleString() +
+                    "₮";
+
+                packageSelect.appendChild(option);
+
+            });
+
+        }
+
+
+        function updatePrice() {
+
+            const price =
+                document.getElementById("package").value;
+
+            document.getElementById("price")
+                .innerText =
+                price
+                    ? Number(price).toLocaleString() + "₮"
+                    : "0₮";
+
+        }
+
+
+        function createOrder() {
+
+            const game =
+                document.getElementById("game").value;
+
+            const playerId =
+                document.getElementById("playerId").value;
+
+            const serverId =
+                document.getElementById("serverId").value;
+
+            const packageSelect =
+                document.getElementById("package");
+
+            const packageName =
+                packageSelect.options[
+                    packageSelect.selectedIndex
+                ]?.text;
+
+
+            if (!game) {
+
+                alert("Тоглоомоо сонгоно уу!");
+
+                return;
+            }
+
+
+            if (!playerId) {
+
+                alert("Player ID оруулна уу!");
+
+                return;
+            }
+
+
+            if (!packageSelect.value) {
+
+                alert("Багцаа сонгоно уу!");
+
+                return;
+            }
+
+
+            const orderNumber =
+                "TOP-" +
+                Math.floor(
+                    10000 +
+                    Math.random() * 90000
+                );
+
+
+            const result =
+                document.getElementById("result");
+
+
+            result.innerHTML =
+
+                "✅ <strong>Demo захиалга үүслээ!</strong><br><br>" +
+
+                "🎮 Тоглоом: " +
+                game +
+                "<br>" +
+
+                "👤 Player ID: " +
+                playerId +
+                "<br>" +
+
+                "🌐 Server ID: " +
+                (serverId || "Оруулаагүй") +
+                "<br>" +
+
+                "💎 Багц: " +
+                packageName +
+                "<br>" +
+
+                "🎫 Захиалгын дугаар: " +
+                "<strong>" +
+                orderNumber +
+                "</strong><br><br>" +
+
+                '<span class="pending">' +
+                "⏳ Төлөв: Pending" +
+                "</span><br><br>" +
+
+                "⚠️ Энэ нь зөвхөн Demo систем.";
+
+
+            result.style.display = "block";
+
+        }
+
+    </script>
+
+</body>
+
+</html>
+```

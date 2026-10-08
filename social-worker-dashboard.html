@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Нийгмийн ажилтан — Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #202636;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            height: 70px;
+            padding: 0 40px;
+            background: #3730a3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logout {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #3730a3;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            color: #3730a3;
+        }
+
+        .description {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            flex: 1;
+            min-width: 180px;
+            padding: 22px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #3730a3;
+        }
+
+        .stat-title {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .reports {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .report {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .report-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .category {
+            font-size: 19px;
+            font-weight: bold;
+            color: #3730a3;
+        }
+
+        .date {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .description-box {
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 10px;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            white-space: pre-wrap;
+        }
+
+        .student-info {
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px 14px;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .anonymous {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .empty {
+            padding: 50px;
+            background: white;
+            border-radius: 14px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            🛡️ School Safety
+        </div>
+
+        <button class="logout" onclick="logout()">
+            🚪 Гарах
+        </button>
+    </nav>
+
+
+    <div class="container">
+
+        <h1>Нийгмийн ажилтны Dashboard</h1>
+
+        <p class="description">
+            Сурагчдаас ирсэн нууц санал, гомдлыг эндээс хянах боломжтой.
+        </p>
+
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-number" id="totalCount">
+                    0
+                </div>
+
+                <div class="stat-title">
+                    Нийт гомдол
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-number" id="newCount">
+                    0
+                </div>
+
+                <div class="stat-title">
+                    Шинэ
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-number" id="reviewingCount">
+                    0
+                </div>
+
+                <div class="stat-title">
+                    Шалгаж байгаа
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-number" id="resolvedCount">
+                    0
+                </div>
+
+                <div class="stat-title">
+                    Шийдвэрлэсэн
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="loading" class="loading">
+            ⏳ Гомдлуудыг ачааллаж байна...
+        </div>
+
+
+        <div id="reports" class="reports"></div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://ltpsvdthypdjyuaspxyr.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_5g3Os_4D4O6vliZXnQolyA_3_mB8LMn";
+
+
+        const supabaseClient =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        async function checkLogin() {
+
+            const {
+                data: {
+                    session
+                }
+            } =
+                await supabaseClient.auth.getSession();
+
+
+            if (!session) {
+
+                window.location.href =
+                    "social-worker.html";
+
+                return false;
+            }
+
+            return true;
+        }
+
+
+        async function loadReports() {
+
+            const loggedIn =
+                await checkLogin();
+
+            if (!loggedIn) return;
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("reports")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    });
+
+
+            document.getElementById("loading")
+                .style.display = "none";
+
+
+            if (error) {
+
+                document.getElementById("reports")
+                    .innerHTML =
+                    `<div class="empty">
+                        ❌ Гомдлуудыг ачааллахад алдаа гарлаа.
+                    </div>`;
+
+                console.error(error);
+
+                return;
+            }
+
+
+            updateStats(data);
+
+            displayReports(data);
+        }
+
+
+        function updateStats(data) {
+
+            document.getElementById("totalCount")
+                .innerText = data.length;
+
+
+            document.getElementById("newCount")
+                .innerText =
+                data.filter(
+                    report => report.status === "new"
+                ).length;
+
+
+            document.getElementById("reviewingCount")
+                .innerText =
+                data.filter(
+                    report => report.status === "reviewing"
+                ).length;
+
+
+            document.getElementById("resolvedCount")
+                .innerText =
+                data.filter(
+                    report => report.status === "resolved"
+                ).length;
+        }
+
+
+        function displayReports(data) {
+
+            const container =
+                document.getElementById("reports");
+
+
+            if (data.length === 0) {
+
+                container.innerHTML =
+                    `<div class="empty">
+                        📭 Одоогоор ирсэн санал / гомдол алга байна.
+                    </div>`;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                data.map(report => {
+
+                    const date =
+                        new Date(
+                            report.created_at
+                        ).toLocaleString(
+                            "mn-MN"
+                        );
+
+
+                    const studentInfo =
+    `<div class="student-info">
+
+        👤 Нэр:
+        ${escapeHtml(report.student_name || "-")}
+        <br>
+
+        🏫 Анги:
+        ${escapeHtml(report.class_name || "-")}
+        <br>
+
+        📞 Холбоо:
+        ${escapeHtml(report.contact || "-")}
+
+    </div>`;
+
+
+                    return `
+
+                        <div class="report">
+
+                            <div class="report-top">
+
+                                <div class="category">
+                                    ${escapeHtml(report.category)}
+                                </div>
+
+                                <div class="date">
+                                    ${date}
+                                </div>
+
+                            </div>
+
+
+                            <div class="description-box">
+                                ${escapeHtml(report.description)}
+                            </div>
+
+
+                            ${studentInfo}
+
+
+                            <div class="status-row">
+
+                                <strong>
+                                    Төлөв:
+                                </strong>
+
+                                <select
+                                    onchange="updateStatus(
+                                        '${report.id}',
+                                        this.value
+                                    )"
+                                >
+
+                                    <option
+                                        value="new"
+                                        ${report.status === "new" ? "selected" : ""}
+                                    >
+                                        🟡 Шинэ
+                                    </option>
+
+                                    <option
+                                        value="reviewing"
+                                        ${report.status === "reviewing" ? "selected" : ""}
+                                    >
+                                        🔵 Шалгаж байна
+                                    </option>
+
+                                    <option
+                                        value="resolved"
+                                        ${report.status === "resolved" ? "selected" : ""}
+                                    >
+                                        🟢 Шийдвэрлэсэн
+                                    </option>
+
+                                    <option
+                                        value="closed"
+                                        ${report.status === "closed" ? "selected" : ""}
+                                    >
+                                        ⚫ Хаасан
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join("");
+        }
+
+
+        async function updateStatus(
+            id,
+            status
+        ) {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("reports")
+                    .update({
+                        status: status
+                    })
+                    .eq("id", id);
+
+
+            if (error) {
+
+                alert(
+                    "Төлөв өөрчлөхөд алдаа гарлаа."
+                );
+
+                console.error(error);
+
+                return;
+            }
+
+
+            loadReports();
+        }
+
+
+        async function logout() {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "social-worker.html";
+        }
+
+
+        function escapeHtml(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent =
+                text;
+
+            return div.innerHTML;
+        }
+
+
+        loadReports();
+
+    </script>
+
+</body>
+
+</html>
